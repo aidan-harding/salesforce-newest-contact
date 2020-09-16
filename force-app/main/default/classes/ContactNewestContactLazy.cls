@@ -3,7 +3,7 @@
  * @date 08/09/2020
  */
 
-global without sharing class NewestContactLazy implements nebc.AfterInsert, nebc.AfterUpdate {
+global without sharing class ContactNewestContactLazy implements nebc.AfterInsert, nebc.AfterUpdate {
 
     global void handleAfterInsert(List<Contact> newList) {
         new nebc.LazySObjectIterator(newList)

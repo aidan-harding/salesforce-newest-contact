@@ -4,9 +4,9 @@
  */
 
 @IsTest
-private class NewestContactApexTest {
+private class ContactNewestContactLazyTest {
 
-    static NewestContactTest newestContactTest = new NewestContactTest('Apex');
+    static ContactNewestContactTest newestContactTest = new ContactNewestContactTest('Lazy');
 
     @IsTest
     static void singleContact() {

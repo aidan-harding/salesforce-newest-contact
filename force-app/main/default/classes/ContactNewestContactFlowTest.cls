@@ -4,9 +4,9 @@
  */
 
 @IsTest
-private class NewestContactFlowTest {
+private class ContactNewestContactFlowTest {
 
-    static NewestContactTest newestContactTest = new NewestContactTest('Flow');
+    static ContactNewestContactTest newestContactTest = new ContactNewestContactTest('Flow');
 
     @IsTest
     static void singleContact() {

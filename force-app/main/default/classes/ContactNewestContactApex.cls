@@ -3,7 +3,7 @@
  * @date 08/09/2020
  */
 
-global without sharing class NewestContactApex implements nebc.AfterInsert, nebc.AfterUpdate {
+global without sharing class ContactNewestContactApex implements nebc.AfterInsert, nebc.AfterUpdate {
 
     global void handleAfterInsert(List<Contact> newList) {
         Map<Id, Account> toUpdate = new Map<Id, Account>();

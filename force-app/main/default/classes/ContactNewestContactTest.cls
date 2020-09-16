@@ -5,12 +5,12 @@
  * scenarios that any solution should address
  */
 
-public class NewestContactTest {
+public class ContactNewestContactTest {
     
     private String componentToTest;
     private nebc.TestRecordSource testRecordSource;
 
-    public NewestContactTest(String componentToTest) {
+    public ContactNewestContactTest(String componentToTest) {
         this.componentToTest = componentToTest;
         this.testRecordSource = new nebc.TestRecordSource();
     }
