@@ -1,6 +1,8 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 08/09/2020
+ * @description generic test handler that can be parameterised by the Contact.FirstName and goes through all the
+ * scenarios that any solution should address
  */
 
 public class NewestContactTest {
@@ -96,5 +98,4 @@ public class NewestContactTest {
         System.assertEquals(null, testAccounts[1].Newest_Contact__c);
         System.assertEquals(testContacts[1].Id, testAccounts[0].Newest_Contact__c);
     }
-
 }
