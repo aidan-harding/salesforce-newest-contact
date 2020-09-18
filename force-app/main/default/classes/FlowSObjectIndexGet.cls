@@ -1,7 +1,7 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 18/09/2020
- * @description Given a handle obtained from FlowSobjectIndexCreate, and an Id to look up, returns an SObject from the map
+ * @description Given a handle obtained from FlowSobjectIndexCreate, and an key to look up, returns an SObject from the map
  */
 
 public class FlowSObjectIndexGet {
