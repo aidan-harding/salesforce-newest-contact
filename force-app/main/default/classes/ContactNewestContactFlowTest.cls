@@ -27,4 +27,9 @@ private class ContactNewestContactFlowTest {
     static void noAccount() {
         newestContactTest.noAccount();
     }
+
+    @IsTest
+    static void transfer() {
+        newestContactTest.transfer();
+    }
 }

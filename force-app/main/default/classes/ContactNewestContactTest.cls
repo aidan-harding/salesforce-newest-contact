@@ -90,6 +90,7 @@ public class ContactNewestContactTest {
         Test.startTest();
         testContacts[1].AccountId = testAccounts[0].Id;
         update testContacts[1];
+        debugMeasures();
         Test.stopTest();
 
         testAccounts[0] = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccounts[0].Id];
@@ -97,5 +98,10 @@ public class ContactNewestContactTest {
 
         System.assertEquals(null, testAccounts[1].Newest_Contact__c);
         System.assertEquals(testContacts[1].Id, testAccounts[0].Newest_Contact__c);
+    }
+
+    private void debugMeasures() {
+        System.debug('SOQL queries: ' + Limits.getQueries());
+        System.debug('DML statements: ' + Limits.getDmlStatements());
     }
 }
