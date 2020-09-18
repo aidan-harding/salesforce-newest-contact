@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Create_AccountId_to_Contacts</name>
         <label>Create AccountId to Contacts</label>
-        <locationX>50</locationX>
-        <locationY>733</locationY>
+        <locationX>183</locationX>
+        <locationY>644</locationY>
         <actionName>FlowSObjectIndexCreate</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -31,8 +31,8 @@
     <actionCalls>
         <name>Get_Newest_Contact</name>
         <label>Get Newest Contact</label>
-        <locationX>270</locationX>
-        <locationY>973</locationY>
+        <locationX>366</locationX>
+        <locationY>797</locationY>
         <actionName>FlowSObjectIndexGet</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -59,8 +59,8 @@
     <actionCalls>
         <name>Get_Old_Contact</name>
         <label>Get Old Contact</label>
-        <locationX>182</locationX>
-        <locationY>253</locationY>
+        <locationX>412</locationX>
+        <locationY>268</locationY>
         <actionName>FlowOldRecords</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -85,8 +85,8 @@
     <assignments>
         <name>Add_Account_To_Update</name>
         <label>Add Account To Update</label>
-        <locationX>270</locationX>
-        <locationY>1549</locationY>
+        <locationX>499</locationX>
+        <locationY>1277</locationY>
         <assignmentItems>
             <assignToReference>AccountsToUpdate</assignToReference>
             <operator>Add</operator>
@@ -101,8 +101,8 @@
     <assignments>
         <name>Collect_Old_and_New_Account_Ids</name>
         <label>Collect Old and New Account Ids</label>
-        <locationX>50</locationX>
-        <locationY>493</locationY>
+        <locationX>183</locationX>
+        <locationY>380</locationY>
         <assignmentItems>
             <assignToReference>AccountIds</assignToReference>
             <operator>Add</operator>
@@ -124,8 +124,8 @@
     <assignments>
         <name>Create_Account_To_Update</name>
         <label>Create Account To Update</label>
-        <locationX>270</locationX>
-        <locationY>1093</locationY>
+        <locationX>487</locationX>
+        <locationY>797</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Id</assignToReference>
             <operator>Assign</operator>
@@ -134,14 +134,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Is_Newest_Contact_Null</targetReference>
+            <targetReference>Null_Checks</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Newest_Contact</name>
         <label>Newest Contact</label>
-        <locationX>402</locationX>
-        <locationY>1333</locationY>
+        <locationX>637</locationX>
+        <locationY>1146</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Newest_Contact__c</assignToReference>
             <operator>Assign</operator>
@@ -156,8 +156,8 @@
     <assignments>
         <name>Newest_Contact_Null</name>
         <label>Newest Contact Null</label>
-        <locationX>138</locationX>
-        <locationY>1333</locationY>
+        <locationX>360</locationX>
+        <locationY>1133</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Newest_Contact__c</assignToReference>
             <operator>Assign</operator>
@@ -172,8 +172,8 @@
     <decisions>
         <name>Is_Account_Changed</name>
         <label>Is Account Changed</label>
-        <locationX>182</locationX>
-        <locationY>373</locationY>
+        <locationX>404</locationX>
+        <locationY>384</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Account_Changed</name>
@@ -199,14 +199,29 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Is_Newest_Contact_Null</name>
-        <label>Is Newest Contact Null</label>
-        <locationX>270</locationX>
-        <locationY>1213</locationY>
+        <name>Null_Checks</name>
+        <label>Null Checks</label>
+        <locationX>478</locationX>
+        <locationY>1003</locationY>
         <defaultConnector>
             <targetReference>Newest_Contact</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Account_Id_Is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>AccountToUpdate.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Over_Accounts</targetReference>
+            </connector>
+            <label>Account Id Is Null</label>
+        </rules>
         <rules>
             <name>Newest_Contact_Is_Null</name>
             <conditionLogic>and</conditionLogic>
@@ -228,8 +243,8 @@
     <loops>
         <name>Loop_Over_Accounts</name>
         <label>Loop Over Accounts</label>
-        <locationX>50</locationX>
-        <locationY>853</locationY>
+        <locationX>183</locationX>
+        <locationY>793</locationY>
         <collectionReference>AccountIds</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -248,7 +263,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -261,8 +276,8 @@
     <recordLookups>
         <name>Get_All_Contacts</name>
         <label>Get All Contacts</label>
-        <locationX>50</locationX>
-        <locationY>613</locationY>
+        <locationX>183</locationX>
+        <locationY>523</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Create_AccountId_to_Contacts</targetReference>
@@ -292,13 +307,13 @@
     <recordUpdates>
         <name>Update_Accounts</name>
         <label>Update Accounts</label>
-        <locationX>50</locationX>
-        <locationY>1765</locationY>
+        <locationX>87</locationX>
+        <locationY>1267</locationY>
         <inputReference>AccountsToUpdate</inputReference>
     </recordUpdates>
     <start>
-        <locationX>56</locationX>
-        <locationY>0</locationY>
+        <locationX>286</locationX>
+        <locationY>48</locationY>
         <connector>
             <targetReference>Get_Old_Contact</targetReference>
         </connector>
@@ -306,7 +321,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>AccountIds</name>
         <dataType>String</dataType>
