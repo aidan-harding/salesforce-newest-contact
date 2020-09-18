@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Create_AccountId_to_Contacts</name>
+        <label>Create AccountId to Contacts</label>
+        <locationX>50</locationX>
+        <locationY>733</locationY>
+        <actionName>FlowSObjectIndexCreate</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Loop_Over_Accounts</targetReference>
+        </connector>
+        <dataTypeMappings>
+            <typeName>T__records</typeName>
+            <typeValue>Contact</typeValue>
+        </dataTypeMappings>
+        <inputParameters>
+            <name>indexField</name>
+            <value>
+                <stringValue>AccountId</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>records</name>
+            <value>
+                <elementReference>Get_All_Contacts</elementReference>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Get_Newest_Contact</name>
+        <label>Get Newest Contact</label>
+        <locationX>270</locationX>
+        <locationY>973</locationY>
+        <actionName>FlowSObjectIndexGet</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Account_To_Update</targetReference>
+        </connector>
+        <dataTypeMappings>
+            <typeName>U__output</typeName>
+            <typeValue>Contact</typeValue>
+        </dataTypeMappings>
+        <inputParameters>
+            <name>indexHandle</name>
+            <value>
+                <elementReference>Create_AccountId_to_Contacts</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>key</name>
+            <value>
+                <elementReference>Loop_Over_Accounts</elementReference>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <name>Get_Old_Contact</name>
         <label>Get Old Contact</label>
         <locationX>182</locationX>
@@ -11,11 +67,11 @@
             <targetReference>Is_Account_Changed</targetReference>
         </connector>
         <dataTypeMappings>
-            <typeName>T__data</typeName>
+            <typeName>U__output</typeName>
             <typeValue>Contact</typeValue>
         </dataTypeMappings>
         <dataTypeMappings>
-            <typeName>U__output</typeName>
+            <typeName>T__data</typeName>
             <typeValue>Contact</typeValue>
         </dataTypeMappings>
         <inputParameters>
@@ -30,7 +86,7 @@
         <name>Add_Account_To_Update</name>
         <label>Add Account To Update</label>
         <locationX>270</locationX>
-        <locationY>1309</locationY>
+        <locationY>1549</locationY>
         <assignmentItems>
             <assignToReference>AccountsToUpdate</assignToReference>
             <operator>Add</operator>
@@ -62,14 +118,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Over_Accounts</targetReference>
+            <targetReference>Get_All_Contacts</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Create_Account_To_Update</name>
         <label>Create Account To Update</label>
         <locationX>270</locationX>
-        <locationY>853</locationY>
+        <locationY>1093</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Id</assignToReference>
             <operator>Assign</operator>
@@ -85,7 +141,7 @@
         <name>Newest_Contact</name>
         <label>Newest Contact</label>
         <locationX>402</locationX>
-        <locationY>1093</locationY>
+        <locationY>1333</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Newest_Contact__c</assignToReference>
             <operator>Assign</operator>
@@ -101,7 +157,7 @@
         <name>Newest_Contact_Null</name>
         <label>Newest Contact Null</label>
         <locationX>138</locationX>
-        <locationY>1093</locationY>
+        <locationY>1333</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Newest_Contact__c</assignToReference>
             <operator>Assign</operator>
@@ -146,7 +202,7 @@
         <name>Is_Newest_Contact_Null</name>
         <label>Is Newest Contact Null</label>
         <locationX>270</locationX>
-        <locationY>973</locationY>
+        <locationY>1213</locationY>
         <defaultConnector>
             <targetReference>Newest_Contact</targetReference>
         </defaultConnector>
@@ -167,13 +223,13 @@
             <label>Newest Contact Is Null</label>
         </rules>
     </decisions>
-    <interviewLabel>Contact-Update: Newest Contact {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Contact-Update: Newest Contact</label>
+    <interviewLabel>Contact-Update: Newest Contact (SObjectIndex) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contact-Update: Newest Contact (SObjectIndex)</label>
     <loops>
         <name>Loop_Over_Accounts</name>
         <label>Loop Over Accounts</label>
         <locationX>50</locationX>
-        <locationY>613</locationY>
+        <locationY>853</locationY>
         <collectionReference>AccountIds</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -203,23 +259,32 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Newest_Contact</name>
-        <label>Get Newest Contact</label>
-        <locationX>270</locationX>
-        <locationY>733</locationY>
+        <name>Get_All_Contacts</name>
+        <label>Get All Contacts</label>
+        <locationX>50</locationX>
+        <locationY>613</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Create_Account_To_Update</targetReference>
+            <targetReference>Create_AccountId_to_Contacts</targetReference>
         </connector>
         <filters>
             <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Loop_Over_Accounts</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Old_Contact.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Contact</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>AccountId</queriedFields>
         <sortField>CreatedDate</sortField>
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -228,7 +293,7 @@
         <name>Update_Accounts</name>
         <label>Update Accounts</label>
         <locationX>50</locationX>
-        <locationY>1525</locationY>
+        <locationY>1765</locationY>
         <inputReference>AccountsToUpdate</inputReference>
     </recordUpdates>
     <start>
@@ -241,7 +306,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Obsolete</status>
     <variables>
         <name>AccountIds</name>
         <dataType>String</dataType>
