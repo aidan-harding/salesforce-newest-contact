@@ -9,6 +9,8 @@ public class ContactNewestContactTest {
     
     private String componentToTest;
     private nebc.TestRecordSource testRecordSource;
+    private Long timeBefore;
+    private Integer cpuTimeBefore;
 
     public ContactNewestContactTest(String componentToTest) {
         this.componentToTest = componentToTest;
@@ -88,6 +90,7 @@ public class ContactNewestContactTest {
         Test.setCreatedDate(testContacts[0].Id, Datetime.now().addMinutes(-1));
 
         Test.startTest();
+        measureBefore();
         testContacts[1].AccountId = testAccounts[0].Id;
         update testContacts[1];
         debugMeasures();
@@ -100,8 +103,64 @@ public class ContactNewestContactTest {
         System.assertEquals(testContacts[1].Id, testAccounts[0].Newest_Contact__c);
     }
 
+    public void transferToNull() {
+        Account testAccount = (Account)testRecordSource.getRecord(Account.SObjectType).withInsert();
+        Contact testContact = (Contact)testRecordSource.getRecord(Contact.SObjectType)
+                .put(Contact.FirstName, componentToTest)
+                .withInsert();
+
+        Test.startTest();
+        testContact.AccountId = null;
+        update testContact;
+        Test.stopTest();
+
+        testAccount = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccount.Id];
+
+        System.assertEquals(null, testAccount.Newest_Contact__c);
+    }
+
+    public void bulkTransfer() {
+        Integer nRecords = 200;
+        List<Account> testAccounts = testRecordSource.getRecord(Account.SObjectType).withInsert(nRecords);
+        List<Contact> testContacts = testRecordSource.getRecord(Contact.SObjectType)
+                .put(Contact.FirstName, componentToTest)
+                .withoutInsert(nRecords);
+
+        for(Integer i=1; i < nRecords; i++ ) {
+            testContacts[i].AccountId = testAccounts[i].Id;
+        }
+        insert testContacts;
+        for(Integer i=1; i < nRecords; i++ ) {
+            Test.setCreatedDate(testContacts[i].Id, Datetime.now().addMinutes(-i));
+        }
+
+        Test.startTest();
+        measureBefore();
+        for(Integer i=0; i < nRecords-1; i++ ) {
+            testContacts[i].AccountId = testAccounts[i+1].Id;
+        }
+        update testContacts;
+        debugMeasures();
+        Test.stopTest();
+
+        testAccounts = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccounts];
+
+        for(Integer i=0; i < nRecords-1; i++ ) {
+            System.assertEquals(testContacts[i].Id, testAccounts[i+1].Newest_Contact__c);
+        }
+        System.assertEquals(null, testAccounts[0].Newest_Contact__c);
+
+    }
+
+    private void measureBefore() {
+        timeBefore = Datetime.now().getTime();
+        cpuTimeBefore = Limits.getCpuTime();
+    }
+
     private void debugMeasures() {
         System.debug('SOQL queries: ' + Limits.getQueries());
         System.debug('DML statements: ' + Limits.getDmlStatements());
+        System.debug('CPU time: ' + (Limits.getCpuTime() - cpuTimeBefore)/1000.0);
+        System.debug('Elapsed time: ' + (Datetime.now().getTime() - timeBefore)/1000.0);
     }
 }

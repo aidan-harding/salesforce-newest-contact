@@ -32,4 +32,14 @@ private class ContactNewestContactFlowTest {
     static void transfer() {
         newestContactTest.transfer();
     }
+
+    @IsTest
+    static void transferToNull() {
+        newestContactTest.transferToNull();
+    }
+
+    @IsTest
+    static void bulkTransfer() {
+        newestContactTest.bulkTransfer();
+    }
 }
