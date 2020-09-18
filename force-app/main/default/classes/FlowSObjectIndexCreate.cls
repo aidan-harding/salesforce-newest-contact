@@ -1,7 +1,7 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 18/09/2020
- * @description Creates a Map<Id, SObject> from the given data and and returns a handle to that map
+ * @description Creates an SObjectIndex from the given key field and data, then returns a handle to that index
  */
 
 public class FlowSObjectIndexCreate {
