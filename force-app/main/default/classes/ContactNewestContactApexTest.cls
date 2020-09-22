@@ -40,6 +40,6 @@ private class ContactNewestContactApexTest {
 
     @IsTest
     static void bulkTransfer() {
-        newestContactTest.bulkTransfer();
+        newestContactTest.bulkTransfer(200);
     }
 }

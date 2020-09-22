@@ -119,8 +119,7 @@ public class ContactNewestContactTest {
         System.assertEquals(null, testAccount.Newest_Contact__c);
     }
 
-    public void bulkTransfer() {
-        Integer nRecords = 200;
+    public void bulkTransfer(Integer nRecords) {
         List<Account> testAccounts = testRecordSource.getRecord(Account.SObjectType).withInsert(nRecords);
         List<Contact> testContacts = testRecordSource.getRecord(Contact.SObjectType)
                 .put(Contact.FirstName, componentToTest)
