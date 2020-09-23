@@ -4,7 +4,7 @@
  */
 
 @IsTest
-private class TestContactNewestContactSingleContactTest {
+private class TestContactNewestContactSingleContact {
 
     @IsTest
     static void testBehavior() {

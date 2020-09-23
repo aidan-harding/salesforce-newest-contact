@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Assert_Newest_Contact</name>
-        <label>Assert Newest Contact</label>
+        <name>Assert_Found_A_Test_Contact_As_Newest_Contact</name>
+        <label>Assert Found A Test Contact As Newest Contact</label>
         <locationX>176</locationX>
-        <locationY>518</locationY>
-        <actionName>FlowAssertEquals</actionName>
+        <locationY>1070</locationY>
+        <actionName>FlowAssert</actionName>
         <actionType>apex</actionType>
         <inputParameters>
-            <name>actual</name>
+            <name>condition</name>
             <value>
-                <elementReference>Get_Test_Account.Newest_Contact__c</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>expected</name>
-            <value>
-                <elementReference>New_Contact.Id</elementReference>
+                <elementReference>FoundIt</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>message</name>
             <value>
-                <stringValue>Expected Newest Contact to be set</stringValue>
+                <stringValue>Should have found a test contact as newest contact</stringValue>
             </value>
         </inputParameters>
     </actionCalls>
@@ -34,7 +28,7 @@
         <actionName>FlowGetTestRecord</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>New_Contact</targetReference>
+            <targetReference>X2_New_Contacts</targetReference>
         </connector>
         <dataTypeMappings>
             <typeName>U__output</typeName>
@@ -49,11 +43,11 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
-        <name>New_Contact</name>
-        <label>New Contact</label>
+        <name>X2_New_Contacts</name>
+        <label>2 New Contacts</label>
         <locationX>176</locationX>
         <locationY>278</locationY>
-        <actionName>FlowGetTestRecord</actionName>
+        <actionName>FlowGetTestRecords</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Get_Test_Account</targetReference>
@@ -62,6 +56,12 @@
             <typeName>U__output</typeName>
             <typeValue>Contact</typeValue>
         </dataTypeMappings>
+        <inputParameters>
+            <name>nRecords</name>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </inputParameters>
         <inputParameters>
             <name>sObjectType</name>
             <value>
@@ -76,9 +76,64 @@
         </inputParameters>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
+    <assignments>
+        <name>Found_It</name>
+        <label>Found It</label>
+        <locationX>264</locationX>
+        <locationY>758</locationY>
+        <assignmentItems>
+            <assignToReference>FoundIt</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Over_Contacts</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Is_This_The_Newest_Contact</name>
+        <label>Is This The Newest Contact?</label>
+        <locationX>396</locationX>
+        <locationY>638</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Over_Contacts</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Newest_Contact</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Test_Account.Newest_Contact__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Loop_Over_Contacts.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Found_It</targetReference>
+            </connector>
+            <label>Is Newest Contact</label>
+        </rules>
+    </decisions>
     <description>@IsTest</description>
-    <interviewLabel>Test {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Test: Contact Newest Contact Single Contact</label>
+    <interviewLabel>Test: Contact Newest Contact Two Contacts {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Test: Contact Newest Contact Two Contacts</label>
+    <loops>
+        <name>Loop_Over_Contacts</name>
+        <label>Loop Over Contacts</label>
+        <locationX>176</locationX>
+        <locationY>518</locationY>
+        <collectionReference>X2_New_Contacts</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_This_The_Newest_Contact</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Assert_Found_A_Test_Contact_As_Newest_Contact</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -105,7 +160,7 @@
         <locationY>398</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assert_Newest_Contact</targetReference>
+            <targetReference>Loop_Over_Contacts</targetReference>
         </connector>
         <filters>
             <field>Id</field>
@@ -126,4 +181,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>FoundIt</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
 </Flow>

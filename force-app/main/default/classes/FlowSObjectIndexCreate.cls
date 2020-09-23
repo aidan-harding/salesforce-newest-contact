@@ -6,7 +6,7 @@
 
 public class FlowSObjectIndexCreate {
 
-    @InvocableMethod
+    @InvocableMethod(Label='Create SObjectIndex')
     public static List<Integer> create(List<FlowSObjectIndexCreate.Request> requests) {
         Integer handle = FlowSObjectIndex.indexes.size();
         nebc.SObjectIndex thisSObjectIndex = new nebc.SObjectIndex(requests[0].indexField);

@@ -3,20 +3,18 @@
  * @date 23/09/2020
  */
 
-public with sharing class FlowAssertEquals {
+public with sharing class FlowAssert {
 
-    @InvocableMethod(Label='Assert Equals')
+    @InvocableMethod(Label='Assert')
     public static  void makeAssertions(List<Assertion> assertions) {
         for(Assertion thisAssertion : assertions) {
-            System.assertEquals(thisAssertion.expected, thisAssertion.actual, thisAssertion.message);
+            System.assert(thisAssertion.condition, thisAssertion.message);
         }
     }
 
     public class Assertion {
         @InvocableVariable
-        public String expected;
-        @InvocableVariable
-        public String actual;
+        public Boolean condition;
         @InvocableVariable
         public String message;
     }

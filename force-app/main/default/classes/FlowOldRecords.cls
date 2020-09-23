@@ -13,7 +13,7 @@ global without sharing class FlowOldRecords implements nebc.BeforeUpdate {
         typeToOldMap.put(thisType, new Map<Id, SObject>(oldList));
     }
 
-    @InvocableMethod
+    @InvocableMethod(Label='Get Old Record')
     public static List<SObject> getOldRecord(List<SObject> data) {
         List<SObject> results = new List<SObject>();
         for(SObject thisSobject : data) {

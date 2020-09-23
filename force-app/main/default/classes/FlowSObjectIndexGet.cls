@@ -6,7 +6,7 @@
 
 public class FlowSObjectIndexGet {
 
-    @InvocableMethod
+    @InvocableMethod(Label='Get Record From SObjectIndex')
     public static List<SObject> get(List<FlowSObjectIndexGet.Request> requests) {
         List<SObject> results = new List<SObject>();
         for(FlowSObjectIndexGet.Request thisRequest : requests) {
