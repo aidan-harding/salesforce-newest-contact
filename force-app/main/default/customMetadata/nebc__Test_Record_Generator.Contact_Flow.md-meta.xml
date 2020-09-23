@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Contact: Flow</label>
+    <protected>false</protected>
+    <values>
+        <field>nebc__Apex_Class__c</field>
+        <value xsi:type="xsd:string">nebc.TestMetadataRecordGenerator</value>
+    </values>
+    <values>
+        <field>nebc__Inherits_From_Variant__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>nebc__Parameters__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>nebc__Priority__c</field>
+        <value xsi:type="xsd:double">0.0</value>
+    </values>
+    <values>
+        <field>nebc__SObject__c</field>
+        <value xsi:type="xsd:string">Contact</value>
+    </values>
+    <values>
+        <field>nebc__Variant__c</field>
+        <value xsi:type="xsd:string">Flow</value>
+    </values>
+</CustomMetadata>
