@@ -9,8 +9,7 @@ global without sharing class FlowOldRecords implements nebc.BeforeUpdate {
     private static Map<SObjectType, Map<Id, SObject>> typeToOldMap = new Map<SObjectType, Map<Id, SObject>>();
 
     public void handleBeforeUpdate(List<SObject> oldList, List<SObject> newList) {
-        SObjectType thisType = oldList.getSObjectType();
-        typeToOldMap.put(thisType, new Map<Id, SObject>(oldList));
+        typeToOldMap.put(oldList.getSObjectType(), new Map<Id, SObject>(oldList));
     }
 
     @InvocableMethod(Label='Get Old Record')
