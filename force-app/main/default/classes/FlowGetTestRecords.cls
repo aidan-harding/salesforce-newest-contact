@@ -8,13 +8,9 @@ public with sharing class FlowGetTestRecords {
     @InvocableMethod(Label='Get Test Records')
     public static List<List<SObject>> getRecord(List<TestRecordSpecification> testRecordSpecifications) {
         TestRecordSpecification thisSpecification = testRecordSpecifications[0];
-        SObjectType sObjectType = ((SObject)Type.forName(thisSpecification.sObjectType).newInstance()).getSObjectType();
+        SObjectType sObjectType = Schema.describeSObjects(new List<String> {thisSpecification.sObjectType })[0].SObjectType;
         List<SObject> theRecords = FlowTestRecordSource.testRecordSource.getRecord(sObjectType).asVariant(thisSpecification.variant).withInsert(thisSpecification.nRecords);
-        List<List<SObject>> results = new List<List<SObject>>();
-        for(Integer i=0; i < testRecordSpecifications.size(); i++) {
-            results.add(theRecords);
-        }
-        return results;
+        return new List<List<SObject>> { theRecords };
     }
 
     public class TestRecordSpecification {
