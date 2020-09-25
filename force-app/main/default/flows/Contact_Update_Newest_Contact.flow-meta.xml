@@ -82,9 +82,9 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Newest_Contact</name>
-        <label>Newest Contact</label>
-        <locationX>592</locationX>
+        <name>Set_Account_Newest_Contact</name>
+        <label>Set Account Newest Contact</label>
+        <locationX>591</locationX>
         <locationY>809</locationY>
         <assignmentItems>
             <assignToReference>AccountToUpdate.Newest_Contact__c</assignToReference>
@@ -98,8 +98,8 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Newest_Contact_Null</name>
-        <label>Newest Contact Null</label>
+        <name>Set_Account_Newest_Contact_Null</name>
+        <label>Set Account Newest Contact Null</label>
         <locationX>150</locationX>
         <locationY>800</locationY>
         <assignmentItems>
@@ -148,7 +148,7 @@
         <locationX>372</locationX>
         <locationY>806</locationY>
         <defaultConnector>
-            <targetReference>Newest_Contact</targetReference>
+            <targetReference>Set_Account_Newest_Contact</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -177,7 +177,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Newest_Contact_Null</targetReference>
+                <targetReference>Set_Account_Newest_Contact_Null</targetReference>
             </connector>
             <label>Newest Contact Is Null</label>
         </rules>
@@ -256,7 +256,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Draft</status>
     <variables>
         <name>AccountIds</name>
         <dataType>String</dataType>
