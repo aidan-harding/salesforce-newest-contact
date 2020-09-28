@@ -33,19 +33,6 @@ global without sharing class ContactNewestContactApex implements nebc.AfterInser
         updateNewestContact(accountIdsToUpdate);
     }
 
-    global void handleAfterDelete(List<Contact> oldList) {
-        Set<Id> accountIdsToUpdate = new Set<Id>();
-
-        for (Integer i = 0; i < oldList.size(); i++) {
-            Contact oldContact = oldList[i];
-            if(oldContact.FirstName == 'Apex') {
-                accountIdsToUpdate.add(oldContact.AccountId);
-            }
-        }
-
-        updateNewestContact(accountIdsToUpdate);
-    }
-
     private void updateNewestContact(Set<Id> accountIdsToUpdate) {
         accountIdsToUpdate.remove(null);
 
@@ -62,5 +49,18 @@ global without sharing class ContactNewestContactApex implements nebc.AfterInser
 
             update accountsToUpdate;
         }
+    }
+
+    global void handleAfterDelete(List<Contact> oldList) {
+        Set<Id> accountIdsToUpdate = new Set<Id>();
+
+        for (Integer i = 0; i < oldList.size(); i++) {
+            Contact oldContact = oldList[i];
+            if(oldContact.FirstName == 'Apex') {
+                accountIdsToUpdate.add(oldContact.AccountId);
+            }
+        }
+
+        updateNewestContact(accountIdsToUpdate);
     }
 }
