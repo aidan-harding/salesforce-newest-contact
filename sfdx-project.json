@@ -2,12 +2,20 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "Newest Contact",
+      "versionName": "1.0",
+      "versionNumber": "1.0.0.NEXT",
+      "dependencies": [
+        {
+          "package": "Nebula Core"
+        }
+      ]
     }
   ],
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "49.0",
   "packageAliases": {
-    "Nebula Core": "04t0J000000km0FQAQ"
+    "Nebula Core": "04t6M000000km0ZQAQ"
   }
 }
