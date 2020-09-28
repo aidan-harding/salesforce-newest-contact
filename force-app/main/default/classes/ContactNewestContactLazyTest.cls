@@ -42,4 +42,14 @@ private class ContactNewestContactLazyTest {
     static void bulkTransfer() {
         newestContactTest.bulkTransfer(200);
     }
+
+    @IsTest
+    static void deleteSingle() {
+        newestContactTest.deleteSingle();
+    }
+
+    @IsTest
+    static void deleteWithOtherContact() {
+        newestContactTest.deleteWithOtherContact();
+    }
 }

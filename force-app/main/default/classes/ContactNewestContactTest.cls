@@ -151,6 +151,41 @@ public class ContactNewestContactTest {
 
     }
 
+    public void deleteSingle() {
+        Account testAccount = (Account)testRecordSource.getRecord(Account.SObjectType).withInsert();
+        Contact testContact = (Contact)testRecordSource.getRecord(Contact.SObjectType)
+                .put(Contact.FirstName, componentToTest)
+                .withInsert();
+
+        testAccount = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccount.Id];
+        System.assertEquals(testContact.Id, testAccount.Newest_Contact__c);
+
+        Test.startTest();
+        delete testContact;
+        Test.stopTest();
+
+        testAccount = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccount.Id];
+        System.assertEquals(null, testAccount.Newest_Contact__c);
+    }
+
+    public void deleteWithOtherContact() {
+        Account testAccount = (Account)testRecordSource.getRecord(Account.SObjectType).withInsert();
+        List<Contact> testContacts = testRecordSource.getRecord(Contact.SObjectType)
+                .put(Contact.FirstName, componentToTest)
+                .withInsert(2);
+        testAccount = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccount.Id];
+        Contact toDelete = new Contact(Id = testAccount.Newest_Contact__c);
+
+        Test.startTest();
+        delete toDelete;
+        Test.stopTest();
+
+        testAccount = [SELECT Newest_Contact__c FROM Account WHERE Id = :testAccount.Id];
+
+        Contact remaining = testContacts[0].Id == toDelete.Id ? testContacts[1] : testContacts[0];
+        System.assertEquals(remaining.Id, testAccount.Newest_Contact__c);
+    }
+
     private void measureBefore() {
         timeBefore = Datetime.now().getTime();
         cpuTimeBefore = Limits.getCpuTime();

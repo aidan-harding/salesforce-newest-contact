@@ -3,13 +3,13 @@
  * @date 08/09/2020
  */
 
-global without sharing class ContactNewestContactLazy implements nebc.AfterInsert, nebc.AfterUpdate {
+global without sharing class ContactNewestContactLazy implements nebc.AfterInsert, nebc.AfterUpdate, nebc.AfterDelete {
 
     global void handleAfterInsert(List<Contact> newList) {
         new nebc.LazySObjectIterator(newList)
-                .filterT(new nebc.IsEqual(Contact.FirstName, 'Lazy'))
-                .filterT(new nebc.IsNotNull(Contact.AccountId))
-                .filterT(new nebc.IsUniqueOn(Contact.AccountId))
+                .filterOnField(Contact.FirstName, 'Lazy')
+                .filterOnField(Contact.AccountId, new nebc.IsNotNull())
+                .filterOnField(Contact.AccountId, new nebc.IsUnique())
                 .mapValuesT(
                 new nebc.SObjectFromPrototype(new Account())
                         .putField(Account.Id, Contact.AccountId)
@@ -21,10 +21,23 @@ global without sharing class ContactNewestContactLazy implements nebc.AfterInser
         Set<Id> accountIdsToUpdate = new nebc.LazyTriggerContextPairIterator(oldList, newList)
                 .filterT(new nebc.IsFieldChangedInTrigger(Contact.AccountId))
                 .bothRecords()
-                .filterT(new nebc.IsEqual(Contact.FirstName, 'Lazy'))
-                .filterT(new nebc.IsNotNull(Contact.AccountId))
+                .filterOnField(Contact.FirstName, 'Lazy')
+                .filterOnField(Contact.AccountId, new nebc.IsNotNull())
                 .get(Contact.AccountId, new Set<Id>());
 
+        updateNewestContact(accountIdsToUpdate);
+    }
+
+    global void handleAfterDelete(List<Contact> oldList) {
+        Set<Id> accountIdsToUpdate = new nebc.LazySObjectIterator(oldList)
+                .filterOnField(Contact.FirstName, 'Lazy')
+                .filterOnField(Contact.AccountId, new nebc.IsNotNull())
+                .get(Contact.AccountId, new Set<Id>());
+
+        updateNewestContact(accountIdsToUpdate);
+    }
+
+    private void updateNewestContact(Set<Id> accountIdsToUpdate) {
         if(!accountIdsToUpdate.isEmpty()) {
             List<Account> accountsToUpdate = [
                     SELECT Id, (SELECT Id, CreatedDate FROM Contacts ORDER BY CreatedDate DESC LIMIT 1)

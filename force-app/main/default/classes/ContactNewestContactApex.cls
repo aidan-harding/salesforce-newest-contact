@@ -3,7 +3,7 @@
  * @date 08/09/2020
  */
 
-global without sharing class ContactNewestContactApex implements nebc.AfterInsert, nebc.AfterUpdate {
+global without sharing class ContactNewestContactApex implements nebc.AfterInsert, nebc.AfterUpdate, nebc.AfterDelete {
 
     global void handleAfterInsert(List<Contact> newList) {
         Map<Id, Account> toUpdate = new Map<Id, Account>();
@@ -21,15 +21,32 @@ global without sharing class ContactNewestContactApex implements nebc.AfterInser
     global void handleAfterUpdate(List<Contact> oldList, List<Contact> newList) {
         Set<Id> accountIdsToUpdate = new Set<Id>();
 
-        for(Integer i=0; i < oldList.size(); i++) {
+        for (Integer i = 0; i < oldList.size(); i++) {
             Id oldContactAccountId = oldList[i].AccountId;
             Contact newContact = newList[i];
-            if(oldContactAccountId != newContact.AccountId && newContact.FirstName == 'Apex') {
+            if (oldContactAccountId != newContact.AccountId && newContact.FirstName == 'Apex') {
                 accountIdsToUpdate.add(oldContactAccountId);
                 accountIdsToUpdate.add(newContact.AccountId);
             }
         }
 
+        updateNewestContact(accountIdsToUpdate);
+    }
+
+    global void handleAfterDelete(List<Contact> oldList) {
+        Set<Id> accountIdsToUpdate = new Set<Id>();
+
+        for (Integer i = 0; i < oldList.size(); i++) {
+            Contact oldContact = oldList[i];
+            if(oldContact.FirstName == 'Apex') {
+                accountIdsToUpdate.add(oldContact.AccountId);
+            }
+        }
+
+        updateNewestContact(accountIdsToUpdate);
+    }
+
+    private void updateNewestContact(Set<Id> accountIdsToUpdate) {
         accountIdsToUpdate.remove(null);
 
         if(!accountIdsToUpdate.isEmpty()) {
